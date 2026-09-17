@@ -14,6 +14,7 @@ from sklearn.metrics import classification_report, confusion_matrix
 # 시각화를 위한 라이브러리
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 
 # Non-VPN 및 VPN 데이터셋이 저장된 디렉토리 경로를 지정합니다.
 NONVPN_DIR = "dataset/NonVPN-PCAPs-01"
@@ -52,13 +53,14 @@ def extract_and_save_csv(pcap_path, output_csv_path, label):
         "-e", "tcp.dstport",               # 목적지 TCP PORT
         "-e", "udp.srcport",               # 출발지 UDP PORT
         "-e", "udp.dstport",               # 목적지 UDP PORT
-        "-E", "separator=,"
+        "-E", "separator=,",
+        "-E", "occurrence=f"
     ]
     cmd = ["tshark", "-r", pcap_path] + tshark_fields
 
     try:
         output = subprocess.check_output(cmd, stderr=subprocess.DEVNULL).decode()
-        # print(output)
+        print(output)
         lines = output.strip().split("\n")
         packets = [line.split(",") for line in lines]
         df = pd.DataFrame(packets, columns=["time", "length", "src", "dst", "protocol", "tcp_src_port", "tcp_dst_port", "udp_src_port", "udp_dst_port"])
@@ -66,8 +68,16 @@ def extract_and_save_csv(pcap_path, output_csv_path, label):
         df["length"] = pd.to_numeric(df["length"], errors='coerce')
         df = df.dropna()
 
+
+        df["src_port"] = df["tcp_src_port"].replace('', np.nan).fillna(df["udp_src_port"])
+        df["dst_port"] = df["tcp_dst_port"].replace('', np.nan).fillna(df["udp_dst_port"])
+        
+        # 포트 정보가 없는 패킷(예: ICMP 등)은 '0' 또는 알 수 없음 처리
+        df["src_port"] = df["src_port"].replace('', '0')
+        df["dst_port"] = df["dst_port"].replace('', '0')
+        
         # 흐름 단위 정의 (src-IP와 dst-IP 조합)
-        df["flow"] = df["src"] + "-" + df["dst"]
+        df["flow"] = df["src"] + "-" + df["dst"] + "-" + df["src_port"] + "-" + df["dst_port"] + "-" + df["protocol"]
 
         # 흐름 기준으로 통계 피처 집계
         features = df.groupby("flow").agg({
@@ -76,7 +86,8 @@ def extract_and_save_csv(pcap_path, output_csv_path, label):
         }).reset_index()
 
         # 컬럼 이름 정리
-        features.columns = ["flow", "time_min", "time_max", "packet_count", "total_bytes", "avg_pkt_size", "std_pkt_size", "protocol", "tcp_src_port", "tcp_dst_port", "udp_src_port", "udp_dst_port"]
+        features.columns = ["flow", "time_min", "time_max", "packet_count", "total_bytes", "avg_pkt_size", "std_pkt_size"
+                            , "protocol", "tcp_src_port", "tcp_dst_port", "udp_src_port", "udp_dst_port"]
         features["duration"] = features["time_max"] - features["time_min"]  # 흐름 지속 시간 계산
         features = features.drop(columns=["time_min", "time_max"])  # 불필요한 컬럼 제거
         features["label"] = label  # 클래스 레이블 추가
