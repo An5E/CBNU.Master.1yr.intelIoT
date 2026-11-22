@@ -1,0 +1,4 @@
+﻿dataset,rows,time_col,invalid_timestamps,duplicate_rows_by_timestamp,not_on_expected_grid,start,end,missing_grid_timestamps,longest_missing_run,unique_timestamps
+plant_A,227458,reg_date,0,28,212048,2022-07-14 17:02:00,2026-11-20 17:31:00,137232,665,227441
+plant_B,213722,reg_date,0,34,199183,2024-05-24 16:09:00,2026-11-20 17:38:00,72827,6560,213705
+asos,25320,일시,0,0,0,2024-01-01 00:00:00,2026-11-20 23:00:00,0,0,25320
