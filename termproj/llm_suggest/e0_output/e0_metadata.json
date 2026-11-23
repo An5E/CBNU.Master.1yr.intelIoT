@@ -1,0 +1,27 @@
+{
+  "model": "IsolationForest",
+  "experiment": "E0",
+  "features_ordered": [
+    "rate_output",
+    "energy_ratio",
+    "power_ratio_diff",
+    "ratio_ma_60min"
+  ],
+  "anomaly_score_definition": "-score_samples; larger = more anomalous",
+  "decision_rule": "anomaly_score >= threshold",
+  "threshold": 0.6081341434748425,
+  "threshold_source": "validation quantile",
+  "threshold_quantile": 0.98,
+  "validation_alert_rate_is_not_false_positive_rate": true,
+  "balance_plants": true,
+  "fit_counts": {
+    "A": 56571,
+    "B": 56571
+  },
+  "seed": 42,
+  "n_estimators": 200,
+  "max_samples": 2048,
+  "python_version": "3.10.20",
+  "sklearn_version": "1.7.2",
+  "notes": "Unlabeled data; alarms are anomaly candidates, not diagnosed failures."
+}
