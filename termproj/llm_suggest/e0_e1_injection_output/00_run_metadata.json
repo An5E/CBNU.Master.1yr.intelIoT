@@ -1,0 +1,30 @@
+{
+  "input_test": "d:\\KKW\\_Repository\\VSCode\\github\\CBNU.Master.1yr.intelIoT\\termproj\\llm_suggest\\clean_output\\06_common_test.csv",
+  "model_e0": "d:\\KKW\\_Repository\\VSCode\\github\\CBNU.Master.1yr.intelIoT\\termproj\\llm_suggest\\e0_output\\e0_unified_iforest.joblib",
+  "model_e1": "d:\\KKW\\_Repository\\VSCode\\github\\CBNU.Master.1yr.intelIoT\\termproj\\llm_suggest\\e1_output\\e1_weather_iforest.joblib",
+  "seed": 42,
+  "episodes_per_plant": 25,
+  "scenarios": {
+    "step_drop": {
+      "length": 3,
+      "start_factor": 0.5,
+      "end_factor": 0.5
+    },
+    "sustained_drop": {
+      "length": 12,
+      "start_factor": 0.7,
+      "end_factor": 0.7
+    },
+    "gradual_drop": {
+      "length": 12,
+      "start_factor": 0.95,
+      "end_factor": 0.6
+    }
+  },
+  "thresholds": {
+    "E0": 0.6081341434748425,
+    "E1": 0.5529089552785883
+  },
+  "metric_scope": "synthetic anomalies only; baseline unmodified alerts are NOT false positive rates",
+  "notes": "No model refitting, no validation/test leakage, same test rows and episode onset across E0/E1."
+}

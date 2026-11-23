@@ -1,0 +1,34 @@
+{
+  "experiment": "E1",
+  "model": "IsolationForest",
+  "features_ordered": [
+    "rate_output",
+    "energy_ratio",
+    "power_ratio_diff",
+    "ratio_ma_60min",
+    "asos__기온(°C)",
+    "asos__습도(%)",
+    "asos__현지기압(hPa)"
+  ],
+  "weather_features": [
+    "asos__기온(°C)",
+    "asos__습도(%)",
+    "asos__현지기압(hPa)"
+  ],
+  "seed": 42,
+  "n_estimators": 200,
+  "max_samples": 2048,
+  "fit_counts": {
+    "A": 56571,
+    "B": 56571
+  },
+  "e1_threshold": 0.5529089552785883,
+  "e0_threshold": 0.6081341434748425,
+  "threshold_quantile": 0.98,
+  "threshold_policy": "validation quantile",
+  "score_direction": "-score_samples; higher means more unusual",
+  "weather_data_mode": "historical offline, interpolation may use future data",
+  "python_version": "3.10.20",
+  "sklearn_version": "1.7.2",
+  "label_status": "unlabeled; detection accuracy and real false-positive rate unavailable"
+}
